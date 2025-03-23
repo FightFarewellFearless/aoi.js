@@ -176,8 +176,8 @@ const ComponentParser = async (message, d) => {
             for (let button of inside) {
                 button = button?.split("}")[0];
                 button = button
-                ?.split(/:(?![/][/])/)
-                .map((x) => x.trim().addBrackets());
+                    ?.split(/:(?![/][/])/)
+                    .map((x) => x.trim().addBrackets());
 
                 const label = button.shift();
                 let style = isNaN(button[0]) ? button.shift() : Number(button.shift());
