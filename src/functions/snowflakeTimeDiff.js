@@ -8,21 +8,22 @@ module.exports = async d => {
     if (data.err) return d.error(data.err);
 
     // valid format: time, ms
-    let [id1, id2, format = "time"] = data.inside.splits;
-    id1 = Number(id1);
-    id2 = Number(id2);
+    let [firstSnowflake, secondSnowflake, format = "time"] = data.inside.splits;
+    firstSnowflake = Number(firstSnowflake);
+    secondSnowflake = Number(secondSnowflake);
     
-    if(isNaN(id1) || isNaN(id2)) return d.aoiError.fnError(d, 'custom', {inside: data.inside}, 'Invalid ID Provided In');
+    if(isNaN(firstSnowflake) || isNaN(secondSnowflake)) 
+        return d.aoiError.fnError(d, 'custom', {inside: data.inside}, 'Invalid Snowflake Provided In');
     if(!["time", "ms"].includes(format))
         return d.aoiError.fnError(d, 'custom', {inside: data.inside}, 'Invalid Format Provided In, Must Be Either "time" or "ms"');
 
-    const date1BigInt = BigInt(id1) >> 22n;
-    const date1 = new Date(Number(date1BigInt) + epoch);
+    const timestamp1BigInt = BigInt(firstSnowflake) >> 22n;
+    const timestamp1 = new Date(Number(timestamp1BigInt) + epoch);
 
-    const date2BigInt = BigInt(id2) >> 22n;
-    const date2 = new Date(Number(date2BigInt) + epoch);
+    const timestamp2BigInt = BigInt(secondSnowflake) >> 22n;
+    const timestamp2 = new Date(Number(timestamp2BigInt) + epoch);
 
-    const differences = Math.abs(date2.getTime() - date1.getTime());
+    const differences = Math.abs(timestamp2.getTime() - timestamp1.getTime());
 
     switch(format) {
         case "time":
