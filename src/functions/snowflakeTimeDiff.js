@@ -1,5 +1,5 @@
 const { Time } = require("../core/Time");
-const epoch = 1420070400000;
+const DISCORD_EPOCH = 1420070400000;
 /**
  * @param {import("..").Data} d
  */
@@ -8,27 +8,27 @@ module.exports = async d => {
     if (data.err) return d.error(data.err);
 
     // valid format: time, ms
-    const [firstSnowflake, secondSnowflake, format = "time"] = data.inside.splits;
+    const [firstSnowflake, secondSnowflake, outputFormat = "time"] = data.inside.splits;
     
-    if(isNaN(firstSnowflake) || isNaN(secondSnowflake)) 
+    if (isNaN(firstSnowflake) || isNaN(secondSnowflake)) 
         return d.aoiError.fnError(d, 'custom', {inside: data.inside}, 'Invalid Snowflake Provided In');
-    if(!["time", "ms"].includes(format))
+    if (!["time", "ms"].includes(outputFormat))
         return d.aoiError.fnError(d, 'custom', {inside: data.inside}, 'Invalid Format Provided In, Must Be Either "time" or "ms"');
 
-    const timestamp1BigInt = BigInt(firstSnowflake) >> 22n;
-    const timestamp1 = new Date(Number(timestamp1BigInt) + epoch);
+    const firstTimestampBigInt = BigInt(firstSnowflake) >> 22n;
+    const firstTimestamp = new Date(Number(firstTimestampBigInt) + DISCORD_EPOCH);
 
-    const timestamp2BigInt = BigInt(secondSnowflake) >> 22n;
-    const timestamp2 = new Date(Number(timestamp2BigInt) + epoch);
+    const secondTimestampBigInt = BigInt(secondSnowflake) >> 22n;
+    const secondTimestamp = new Date(Number(secondTimestampBigInt) + DISCORD_EPOCH);
 
-    const differences = Math.abs(timestamp2.getTime() - timestamp1.getTime());
+    const timeDifferenceinMS = Math.abs(secondTimestamp.getTime() - firstTimestamp.getTime());
 
-    switch(format) {
+    switch (outputFormat) {
         case "time":
-            data.result = Time.format(differences).toString();
+            data.result = Time.format(timeDifferenceinMS).toString();
             break;
         case "ms":
-            data.result = differences;
+            data.result = timeDifferenceinMS;
             break;
     }
 
