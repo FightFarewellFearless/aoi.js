@@ -17,7 +17,7 @@ module.exports = async d => {
         return d.aoiError.fnError(d, 'custom', {inside: data.inside}, 'Invalid Format Provided In, Must Be Either "time" or "ms"');
 
     const date1BigInt = BigInt(id1) >> 22n;
-	const date1 = new Date(Number(date1BigInt) + epoch);
+    const date1 = new Date(Number(date1BigInt) + epoch);
 
     const date2BigInt = BigInt(id2) >> 22n;
     const date2 = new Date(Number(date2BigInt) + epoch);
