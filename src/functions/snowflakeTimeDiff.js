@@ -9,8 +9,6 @@ module.exports = async d => {
 
     // valid format: time, ms
     let [firstSnowflake, secondSnowflake, format = "time"] = data.inside.splits;
-    firstSnowflake = Number(firstSnowflake);
-    secondSnowflake = Number(secondSnowflake);
     
     if(isNaN(firstSnowflake) || isNaN(secondSnowflake)) 
         return d.aoiError.fnError(d, 'custom', {inside: data.inside}, 'Invalid Snowflake Provided In');
