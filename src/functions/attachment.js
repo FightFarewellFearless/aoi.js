@@ -8,12 +8,18 @@ module.exports = async (d) => {
     if (data.err) return d.error(data.err);
 
     let [attachment, name, type = "url", encoding] = data.inside.splits;
-    const result = new AttachmentBuilder(
-        type === "buffer"
-            ? Buffer.from(attachment.addBrackets(), encoding)
-            : attachment.addBrackets(),
-        {name: name.addBrackets()},
-    );
+
+    if(type === "buffer") {
+        try {
+            attachment = Buffer.from(attachment.addBrackets(), encoding)
+        } catch (e) {
+            return d.aoiError.fnError(d, 'custom', {}, e.message);
+        }
+    } else {
+        attachment = attachment.addBrackets();
+    }
+
+    const result = new AttachmentBuilder(attachment, { name: name.addBrackets() });
     d.files.push(result);
     
     return {
